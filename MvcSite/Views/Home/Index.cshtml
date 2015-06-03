@@ -1,0 +1,54 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+@{
+    var label1Text = ViewBag.Date ?? "Label1";
+}
+
+<div class="container">
+    <br /><br />
+    <div class="row">
+        <div class="col-md-2 col-md-offset-4">
+            <p>@label1Text</p>
+        </div>
+        <div class="col-md-6">
+            @using (Html.BeginForm("Index", "Home"))
+            {
+                <input type="submit" value="Button1" />
+            }
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-2 col-md-offset-4">
+            <p id="label2">Label2</p>
+        </div>
+        <div class="col-md-6">
+            @using (Ajax.BeginForm("GetRequestTimeAjax", "Home", new AjaxOptions { OnSuccess = "DataRetrieved", HttpMethod = "Post" }))
+            {
+                <input type="submit" value="Button2" />
+            }
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function DataRetrieved(jsonDate) {
+        var currentdate = new Date(parseInt(jsonDate.substr(6)));
+        var currentDateString = ("0" + currentdate.getUTCDate()).slice(-2) + "."
+            + ("0" + (currentdate.getMonth() + 1)).slice(-2) + "."
+            + currentdate.getFullYear() + " "
+            + currentdate.getUTCHours() + ":"
+            + currentdate.getUTCMinutes() + ":"
+            + ("0" + (currentdate.getSeconds())).slice(-2);
+
+
+        document.getElementById("label2").innerHTML = currentDateString;
+    }
+</script>
+
+@section scripts
+{
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+}
